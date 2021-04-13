@@ -3,8 +3,6 @@
 <head>
   <script src="face-api.js"></script>
   <script src="js/commons.js"></script>
-  <script src="js/faceDetectionControls.js"></script>
-  <script src="js/imageSelectionControls.js"></script>
   <script src="js/bbt.js"></script>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.css">
@@ -26,15 +24,15 @@
       </div>
       <div class="row">
         <label for="prediction">Prediction:</label>
+        <input disabled value="-" id="prediction" type="text" class="bold">
+      </div>
+      <div class="row">
+        <label for="prediction">Prediction:</label>
         <input disabled value="-" id="age" type="text" class="bold">
       </div>
       <div class="row">
         <label for="age">Age/gender:</label>
         <input disabled value="-" id="prediction" type="text" class="bold">
-      </div>
-      <div class="row">
-        <label for="expression">Expression:</label>
-        <input disabled value="-" id="expression" type="text" class="bold">
       </div>
       <div class="row">
         <label for="time">Time:</label>
@@ -155,10 +153,8 @@
     }
 
     $(document).ready(function() {
-      renderNavBar('#navbar', 'bbt_face_matching')
+      renderNavBar('#navbar', 'decode_face_matching')
       run()
-
-
     })
 
   </script>

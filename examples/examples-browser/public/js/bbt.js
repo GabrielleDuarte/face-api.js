@@ -5,7 +5,7 @@ function getFaceImageUri(className, idx) {
 }
 
 function renderFaceImageSelectList(selectListId, onChange, initialValue) {
-  const indices = [1, 2, 3, 4, 5]
+  const indices = [1, 2, 3, 4, 5]// Upgrade to 8?
   function renderChildren(select) {
     classes.forEach(className => {
       const optgroup = document.createElement('optgroup')

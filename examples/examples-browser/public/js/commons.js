@@ -81,6 +81,10 @@ function renderNavBar(navbarId, exampleUri) {
       name: 'BBT Face Matching'
     },
     {
+      uri: 'decode_face_matching',
+      name: 'Decode Face Matching'
+    },
+    {
       uri: 'bbt_face_recognition',
       name: 'BBT Face Recognition'
     },
