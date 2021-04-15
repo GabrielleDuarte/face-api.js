@@ -79,7 +79,7 @@ async function runFaceRecognition() {
       
       // const gender = val(`${faceapi.utils.round(age,0)} years`)  
       // console.log(newAge.val())
-      axios.post('http://localhost:4101/apirecord/register', {executionPerImage:"", wholeExecution: "", personName: "", prediction: "", age:faceapi.utils.round(age,0), sex: faceapi.utils.round(genderProbability)})
+      axios.post('http://localhost:4101/apirecord/register', {executionPerImage:"", wholeExecution: "", personName: "", prediction: "", age:faceapi.utils.round(age,0), sex: (`${gender} (${faceapi.utils.round(genderProbability)})`)})
       .then(function (response) {
       // handle success
       console.log(response);
