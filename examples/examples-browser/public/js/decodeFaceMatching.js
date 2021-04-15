@@ -6,6 +6,7 @@ let currImageIdx = 2, currClassIdx = 0
 let to = null
 let ageGenderData =null
 
+
 function onSlower() {
     interval = Math.min(interval + 100, 2000)
     $('#interval').val(interval)
@@ -66,16 +67,31 @@ async function runFaceRecognition() {
 
     const canvas = $('#overlay').get(0)
     //faceapi.matchDimensions(canvas, imgEl)
-
+    
     const resizedResults = faceapi.resizeResults(detectionsWithAgeAndGender, input)
     const minConfidence = 0.05
+    const init = Date();
     resizedResults.forEach(detectionWithAgeAndGender => {
         const{ age, gender, genderProbability, expressions} = detectionWithAgeAndGender
         $('#age').val(`${faceapi.utils.round(age,0)} years`)    
         $('#gender').val(`${gender} (${faceapi.utils.round(genderProbability)})`)    
         $('#expression').val(`${JSON.stringify(expressions)}`)
-        console.log(JSON.stringify(expressions))
+      
+      // const gender = val(`${faceapi.utils.round(age,0)} years`)  
+      // console.log(newAge.val())
+      axios.post('http://localhost:4101/apirecord/register', {executionPerImage:"", wholeExecution: "", personName: "", prediction: "", age:faceapi.utils.round(age,0), sex: faceapi.utils.round(genderProbability)})
+      .then(function (response) {
+      // handle success
+      console.log(response);
+      })
+      .catch(function (error) {
+      // handle error
+      console.log(error);
+      })
+      console.log(JSON.stringify(expressions))
     })
+    /*const init = new Date().getMinutes()
+const finalTime  = new Date().getMinutes() - init*/
 
     currImageIdx = currClassIdx === (classes.length - 1)
         ? currImageIdx + 1
