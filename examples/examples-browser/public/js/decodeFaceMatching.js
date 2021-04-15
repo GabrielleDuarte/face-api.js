@@ -40,8 +40,6 @@ function displayImage(src) {
     getImg().src = src
 }
 
-
-//const detectionsWithAgeAndGender = await faceapi.detectAllFaces(input).withFaceLandmarks().withAgeAndGender()
 async function runFaceRecognition() {
   async function next() {
     $('#age').val('-')
@@ -70,16 +68,19 @@ async function runFaceRecognition() {
     
     const resizedResults = faceapi.resizeResults(detectionsWithAgeAndGender, input)
     const minConfidence = 0.05
-    const init = Date();
+    const init = new Date().getMilliseconds()
+    const initWholeExection = new Date().getSeconds()
     resizedResults.forEach(detectionWithAgeAndGender => {
         const{ age, gender, genderProbability, expressions} = detectionWithAgeAndGender
         $('#age').val(`${faceapi.utils.round(age,0)} years`)    
         $('#gender').val(`${gender} (${faceapi.utils.round(genderProbability)})`)    
         $('#expression').val(`${JSON.stringify(expressions)}`)
+
       
-      // const gender = val(`${faceapi.utils.round(age,0)} years`)  
-      // console.log(newAge.val())
-      axios.post('http://localhost:4101/apirecord/register', {executionPerImage:"", wholeExecution: "", personName: bestMatch.toString(), prediction: bestMatch.toString(), age:faceapi.utils.round(age,0), sex: (`${gender} (${faceapi.utils.round(genderProbability)})`), expression:JSON.stringify(expressions)})
+      
+      const finalTime  = new Date().getMilliseconds() - init
+      const ExecutionTillNow  = new Date().getSeconds() + initWholeExection
+      axios.post('http://localhost:4101/apirecord/register', {fileName:"", executionPerImage:finalTime.toString(), wholeExecution: ExecutionTillNow, personName: bestMatch.toString(), prediction: bestMatch.toString(), age:faceapi.utils.round(age,0), sex: (`${gender} (${faceapi.utils.round(genderProbability)})`), expression:JSON.stringify(expressions)})
       .then(function (response) {
       // handle success
       console.log(response);
@@ -90,8 +91,6 @@ async function runFaceRecognition() {
       })
       console.log(JSON.stringify(expressions))
     })
-    /*const init = new Date().getMinutes()
-const finalTime  = new Date().getMinutes() - init*/
 
     currImageIdx = currClassIdx === (classes.length - 1)
         ? currImageIdx + 1
