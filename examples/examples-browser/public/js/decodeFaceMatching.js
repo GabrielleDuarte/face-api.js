@@ -42,34 +42,40 @@ function displayImage(src) {
 
 //const detectionsWithAgeAndGender = await faceapi.detectAllFaces(input).withFaceLandmarks().withAgeAndGender()
 async function runFaceRecognition() {
-    async function next() {
+  async function next() {
     $('#age').val('-')
+    $('#gender').val('-')
     $('#expression').val('-')
+
     const input = await faceapi.fetchImage(getFaceImageUri(classes[currClassIdx], currImageIdx))
     const imgEl = $('#face').get(0)
     imgEl.src = input.src
 
     const ts = Date.now()
-    const descriptor = await faceapi.computerFaceDescription(input)
+    const descriptor = await faceapi.computeFaceDescriptor(input)
     displayTimeStats(Date.now() - ts)
 
     const bestMatch = faceMatcher.findBestMatch(descriptor)
-    const detectionsWithAgeAndGender = await faceapi.detectAllFaces(input).withFaceLandmarks().withAgeAndGender().withFaceExpressions()
+    const detectionsWithAgeAndGender = await faceapi
+      .detectAllFaces(input)
+      .withFaceLandmarks()
+      .withAgeAndGender()
+      .withFaceExpressions()
 
     $('#prediction').val(bestMatch.toString())
 
     const canvas = $('#overlay').get(0)
-    faceapi.matchDimensions(canvas, ImgEl)
+    //faceapi.matchDimensions(canvas, imgEl)
 
     const resizedResults = faceapi.resizeResults(detectionsWithAgeAndGender, input)
     const minConfidence = 0.05
-    resizedResults.forEach(detectionsWithAgeAndGender => {
-        const{ age, gender, genderProbability, expressions} = result
-        $('#age').val(`${faceapi.utils.round(age,0)} years / ${gender} (${faceapi.utils.round(genderProbability)})`)    
-        $('expression').val(`${JSON.stringify(expressions)}`)
+    resizedResults.forEach(detectionWithAgeAndGender => {
+        const{ age, gender, genderProbability, expressions} = detectionWithAgeAndGender
+        $('#age').val(`${faceapi.utils.round(age,0)} years`)    
+        $('#gender').val(`${gender} (${faceapi.utils.round(genderProbability)})`)    
+        $('#expression').val(`${JSON.stringify(expressions)}`)
+        console.log(JSON.stringify(expressions))
     })
-
-    faceapi.draw.drawDetections(canvas, resizedResults, minConfidence)
 
     currImageIdx = currClassIdx === (classes.length - 1)
         ? currImageIdx + 1
